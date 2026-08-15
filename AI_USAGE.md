@@ -1,66 +1,146 @@
- AI Use Declaration
+# AI Use Declaration
 
-1. Project Overview
+## Project Overview
 
 For this project, I used PyTorch to implement and analyse a GPU-accelerated Sierpinski Triangle.
 
-I used ChatGPT as a learning and development assistant. It helped me understand the Part 3 requirements, compare possible fractal topics, create starting code templates and plan suitable experiments.
+I used ChatGPT as a learning and development assistant. It helped me understand the Part 3 requirements, compare possible fractal topics, develop the initial PyTorch structure, plan experiments and improve the project documentation.
 
-I completed the project step by step. I selected the Sierpinski Triangle, received approval from the teaching staff, created the public GitHub repository, configured the Google Colab GPU environment and ran every part of the notebook myself.
+I completed the project step by step. I selected the topic, obtained approval from the teaching staff, created the public GitHub repository, configured Google Colab, ran every notebook section and checked the results myself.
 
-2. How I Used ChatGPT
+## Project-Related AI Interactions
 
-Topic and Requirements
+### 1. Understanding the Requirements and Selecting a Fractal
 
-I asked ChatGPT to explain the Part 3 requirements and suggest a fractal that was valid, manageable and easy to explain during the Demo.
+**My prompt/request:**
 
-ChatGPT suggested the Sierpinski Triangle because it has a clear recursive structure, a known theoretical dimension and a suitable vectorised PyTorch implementation. I considered this suggestion and obtained teaching-staff approval before starting.
+“Explain the Part 3 requirements carefully and suggest a fractal that is simpler to implement and explain during the Demo.”
 
-PyTorch Implementation
+**AI output and reasoning:**
 
-I asked ChatGPT for help creating a GPU-compatible implementation and understanding the parallel computation.
+ChatGPT explained that the project required a new GitHub repository, a substantially different fractal, meaningful use of PyTorch, reasonable parallelism and additional analysis when AI was used.
 
-ChatGPT provided a starting code structure using PyTorch broadcasting. At each recursion level, every existing point is moved halfway towards each of the three triangle vertices. This produces three new points from every previous point and allows many coordinates to be processed together on the GPU.
+It compared several possible fractals and recommended the Sierpinski Triangle because it has a clear recursive structure, a known theoretical dimension and a suitable vectorised implementation.
 
-I ran the code on a Tesla T4 and confirmed that CUDA was available. At recursion depth 10, the program generated 59,049 points, which matched the expected value of `3^10`.
+**My contribution:**
 
-Additional Analysis
+I considered the suggestion, selected the Sierpinski Triangle and obtained approval from the teaching staff before starting.
 
-ChatGPT suggested several experiments, including:
+### 2. PyTorch and GPU Implementation
 
-* Comparing different recursion depths.
-* Colouring the triangle using the `x` and `y` coordinates.
-* Estimating the box-counting dimension.
-* Comparing CPU and GPU execution times.
+**My prompt/request:**
 
-I ran each experiment and checked the results before including it in the final notebook.
+“Guide me step by step to implement the approved Sierpinski Triangle using PyTorch and the GPU.”
 
-The estimated box-counting dimension was `1.5838`, which was close to the theoretical value of `1.5850`.
+**AI output and reasoning:**
 
-The performance experiment showed that the GPU was slower for the smallest workload because of GPU overhead. However, for recursion depth 14, the GPU achieved approximately `99.35×` speedup. This demonstrated that GPU parallelism becomes more useful as the workload increases.
+ChatGPT suggested representing the triangle vertices and generated points as PyTorch tensors. At each recursion level, every existing point is moved halfway towards each of the three vertices.
 
-GitHub and Documentation
+PyTorch broadcasting was used to combine tensors with shapes `[N, 1, 2]` and `[1, 3, 2]`. This produces three new points from every existing point and allows many coordinates to be processed together on the GPU.
 
-ChatGPT suggested commit messages and helped me organise the project into separate development stages.
+The recursion levels remain sequential because each level depends on the points produced by the previous level.
 
-I created and managed the GitHub repository myself. I added the notebook, checked the changed files, corrected the duplicated `.ipynb` extension, created separate commits and pushed the completed work to the public repository.
+**My contribution and verification:**
 
-ChatGPT did not access or operate my GitHub account.
+I ran the implementation on a Tesla T4 GPU and confirmed that CUDA was available. At recursion depth 10, the program generated 59,049 points, matching the expected value of `3^10`.
 
-3. My Review and Verification
+### 3. Code Comments and Explanation
 
-I did not accept the AI-generated suggestions without checking them. I ran every code section and reviewed the outputs.
+**My prompt/request:**
 
-I verified:
+“Add some Chinese and English comments to the code so that I can understand and explain it during the Demo.”
 
-* That PyTorch was using the Tesla T4 GPU.
-* That the point count followed `3^depth`.
-* That increasing the recursion depth produced the expected self-similar structure.
-* That the colour plots used the same fractal coordinates.
-* That the estimated dimension was close to the theoretical dimension.
-* That GPU synchronisation was included in the timing experiment.
-* That the project files and commit history appeared correctly on GitHub.
+**AI output and reasoning:**
 
-ChatGPT contributed to the initial code structure, explanations, comments, experiment ideas and documentation. I was responsible for selecting the topic, obtaining approval, setting up the environment, running the code, checking the results, correcting problems, managing the repository and preparing the Demo explanation.
+ChatGPT suggested bilingual comments and docstrings explaining the tensor shapes, broadcasting, midpoint calculation and device selection.
 
-I have reviewed this declaration and understand the code and results included in my project. The original ChatGPT conversation can be provided if required.
+**My contribution:**
+
+I added the comments to the notebook, ran the code again and confirmed that the comments did not change the program’s behaviour.
+
+### 4. Visualisation Experiments
+
+**My prompt/request:**
+
+“Help me compare different recursion depths and create simple colour visualisations.”
+
+**AI output and reasoning:**
+
+ChatGPT suggested comparing several recursion depths to demonstrate the development of the fractal. It also suggested mapping colour to the horizontal and vertical coordinates.
+
+**My contribution and verification:**
+
+I generated and checked the depth comparison plots. I also produced two colour visualisations: one based on the x-coordinate and another based on the y-coordinate.
+
+### 5. Fractal Dimension Analysis
+
+**My prompt/request:**
+
+“Help me add a substantial analysis of the Sierpinski Triangle using the box-counting dimension.”
+
+**AI output and reasoning:**
+
+ChatGPT explained the box-counting method and suggested counting occupied boxes at different box sizes. A linear fit of `log(number of occupied boxes)` against `log(1 / box size)` was used to estimate the dimension.
+
+The theoretical dimension is:
+
+`log(3) / log(2) ≈ 1.5850`
+
+**My contribution and verification:**
+
+I ran the analysis and obtained an estimated dimension of 1.5838. The absolute error from the theoretical value was approximately 0.0012, so the result was consistent with the expected dimension.
+
+### 6. CPU and GPU Performance Analysis
+
+**My prompt/request:**
+
+“Help me compare the CPU and GPU execution times fairly.”
+
+**AI output and reasoning:**
+
+ChatGPT suggested using repeated measurements, a GPU warm-up and CUDA synchronisation around the timed GPU operations. It also recommended timing the tensor-generation calculation separately from plotting and transferring results to the CPU.
+
+**My contribution and verification:**
+
+I ran the benchmark five times for each recursion depth. At depth 8, the GPU was slightly slower because the workload was too small to overcome GPU launch overhead. As the workload increased, the GPU became much faster.
+
+At depth 14, the program generated 4,782,969 points and achieved an observed speedup of approximately 99.35 times on the Tesla T4.
+
+### 7. GitHub and Documentation
+
+**My prompt/request:**
+
+“Help me organise the README and AI usage declaration so that the project is clear and easy to review.”
+
+**AI output and reasoning:**
+
+ChatGPT suggested a README structure containing the project overview, implementation method, results, requirements and instructions for running the notebook.
+
+**My contribution:**
+
+I created and managed the GitHub repository myself. I downloaded the notebook from Colab, added it to the repository, reviewed the documentation and created separate commits for the implementation, visualisations, dimension analysis, performance benchmark, AI declaration and README improvements.
+
+## Evaluation of the AI Output
+
+I did not accept the AI suggestions without checking them. I ran every section of the notebook and verified:
+
+* CUDA was available and the tensor calculations used the Tesla T4 GPU.
+* The number of points matched `3^depth`.
+* The generated plots showed the expected Sierpinski Triangle structure.
+* The coordinate-based colour plots behaved as expected.
+* The estimated box-counting dimension was close to the theoretical value.
+* CUDA synchronisation was included in the GPU benchmark.
+* GPU acceleration became more effective as the workload increased.
+* The GitHub repository contained the correct notebook, documentation and commit history.
+
+The AI occasionally gave suggestions that required clarification or adjustment. I tested the results, checked tensor shapes and timing behaviour, and only kept code and explanations that I could understand and verify.
+
+## Ownership Statement
+
+ChatGPT contributed explanations, initial code structures, comments, experiment ideas and documentation suggestions.
+
+I selected the project topic, obtained teaching-staff approval, configured the environment, ran and checked all experiments, reviewed the results, managed the GitHub repository and prepared the final project.
+
+I understand how the Sierpinski Triangle is generated, why the recursion levels are sequential, how PyTorch broadcasting provides parallel computation, how the box-counting dimension is estimated and why the GPU is more effective for larger workloads.
+
+The relevant ChatGPT conversation history remains available and can be shown to the demonstrator if additional evidence is requested.
